@@ -4,6 +4,29 @@
 #include <time.h>
 #include<math.h>
 
+void shuffle(int wDeck[][13]) {
+	for (int i = 1; i <= 52; i++) {
+		int r, c;
+		do {
+			r = rand() % 4;
+			c = rand() % 13;
+		} while (wDeck[r][c]);
+		wDeck[r][c] = i;
+	}
+}
+
+void swap(int *a, int *b) {
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int check(int left, int right, int card) {
+	if (card<left || card>right) return 0;
+	else if (card == left || card == right) return 1;
+	else return 2;
+}
+
 void play(int wDeck[][13], int people,int count) {
 	printf("------------------------\n");
 	int left,right;
@@ -45,4 +68,8 @@ void play(int wDeck[][13], int people,int count) {
 int main() {
 	srand(time(NULL));
 	int deck[4][13] = { 0 }, people;
+	shuffle(deck);
+	printf("´X¤H?");
+	scanf("%d", &people);
+	for (int i = 0; i < 5; i++) play(deck, people, -1 + i * 3);
 }
