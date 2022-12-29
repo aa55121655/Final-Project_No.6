@@ -4,6 +4,7 @@
 #include <time.h>
 #include<math.h>
 
+int *money;
 void shuffle(int wDeck[][13]) {
 	for (int i = 1; i <= 52; i++) {
 		int r, c;
@@ -63,9 +64,28 @@ void play(int wDeck[][13], int people,int count) {
 		else printf("玩家%d輸\n", i + 1);
 	}
 
+	int *gam = calloc(people, sizeof(int)), mag[3] = { 3,7,3 }, *bal = calloc(people, sizeof(int));
+	if (right - left == 2) mag[2] = 10;
+	else if (right - left == 12) mag[0] = 10000;
+	else if (right - left > 5) mag[0] = 5;
+	else mag[2] = 5;
+
+	printf("0:門外(賠率:%d) 1:撞柱(賠率:%d) 2:門內(賠率:%d)\n", mag[0], mag[1], mag[2]);
+	gamble(gam, bal, people, money);
+
+	printf(">>>>>開出來的牌是:%d<<<<<\n", wDeck[count % 4][count % 13] % 13 + 1);
+	for (int i = 0; i < people; i++) {
+		if (gam[i] == mode) {
+			money[i] += bal[i] * mag[gam[i]];
+			printf("玩家%d贏了%d元\n", i + 1, bal[i] * mag[gam[i]]);
+		}
+		else {
+			money[i] -= bal[i];
+			printf("玩家%d輸了%d元\n", i + 1, bal[i]);
+		}
+	}
 }
 int main() {
-
 	srand(time(NULL));
 	int deck[4][13] = { 0 }, people;
 	shuffle(deck);
