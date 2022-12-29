@@ -5,7 +5,6 @@
 #include<math.h>
 
 int *money; //暫定
-
 void shuffle(int wDeck[][13]) {
 	for (int i = 1; i <= 52; i++) {
 		int r, c;
@@ -85,7 +84,6 @@ void play(int wDeck[][13], int people, int count) {
 			printf("玩家%d輸了%d元\n", i + 1, bal[i]);
 		}
 	}
-
 }
 int main() {
 	srand(time(NULL));
