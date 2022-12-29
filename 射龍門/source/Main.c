@@ -4,6 +4,7 @@
 #include <time.h>
 #include<math.h>
 
+int *money;									//暫定
 void shuffle(int wDeck[][13]) {
 	for (int i = 1; i <= 52; i++) {
 		int r, c;
@@ -27,9 +28,9 @@ int check(int left, int right, int card) {
 	else return 2;
 }
 
-void play(int wDeck[][13], int people,int count) {
+void play(int wDeck[][13], int people, int count) {
 	printf("------------------------\n");
-	int left,right;
+	int left, right;
 	count++;
 	left = wDeck[count % 4][count % 13] % 13 + 1;
 	count++;
@@ -44,11 +45,11 @@ void play(int wDeck[][13], int people,int count) {
 	if (left > right) swap(&left, &right);
 	printf("%d %d\n", left, right);
 	count++;
-	int mode = check(left,right, wDeck[count 
+	int mode = check(left, right, wDeck[count
 		% 4][count % 13] % 13 + 1);
 	int *co = calloc(people, sizeof(int));
 	printf("0:門外 1:撞柱 2:門內\n");
-	for (int input,i = 0; i < people; i++) {
+	for (int input, i = 0; i < people; i++) {
 		printf("%d:", i + 1);
 		scanf("%d", &input);
 		while (input < 0 || input>2) {
@@ -57,9 +58,31 @@ void play(int wDeck[][13], int people,int count) {
 		}
 		co[i] = input;
 	}
+
 	for (int i = 0; i < people; i++) {
 		if (co[i] == mode)printf("玩家%d贏\n", i + 1);
 		else printf("玩家%d輸\n", i + 1);
+	}
+
+	int *gam = calloc(people, sizeof(int)), mag[3] = { 3,7,3 }, *bal = calloc(people, sizeof(int));
+	if (right - left == 2) mag[2] = 10;
+	else if (right - left == 12) mag[0] = 10000;
+	else if (right - left > 5) mag[0] = 5;
+	else mag[2] = 5;
+
+	printf("0:門外(賠率:%d) 1:撞柱(賠率:%d) 2:門內(賠率:%d)\n", mag[0], mag[1], mag[2]);
+	gamble(gam, bal, people, money);
+
+	printf(">>>>>開出來的牌是:%d<<<<<\n", wDeck[count % 4][count % 13] % 13 + 1);
+	for (int i = 0; i < people; i++) {
+		if (gam[i] == mode) {
+			money[i] += bal[i] * mag[gam[i]];
+			printf("玩家%d贏了%d元\n", i + 1, bal[i] * mag[gam[i]]);
+		}
+		else {
+			money[i] -= bal[i];
+			printf("玩家%d輸了%d元\n", i + 1, bal[i]);
+		}
 	}
 }
 int main() {
