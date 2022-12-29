@@ -27,6 +27,25 @@ int check(int left, int right, int card) {
 	else return 2;
 }
 
+void gamble(int *gam, int *bal, int people, int *money) {
+	for (int input, i = 0; i < people; i++) {
+		printf("第%d位玩家\n賭法:", i + 1);
+		scanf("%d", &input);
+		while (input < 0 || input>2) {
+			printf("不符合規則請重新輸入賭法:", i + 1);
+			scanf("%d", &input);
+		}
+		gam[i] = input;
+		printf("金額(最多%d):", money[i]);
+		scanf("%d", &input);
+		while (input > money[i] || input <= 0) {
+			printf("不符合規則請重新輸入金額:", i + 1);
+			scanf("%d", &input);
+		}
+		bal[i] = input;
+	}
+}
+
 void play(int wDeck[][13], int people,int count) {
 	printf("------------------------\n");
 	int left,right;
