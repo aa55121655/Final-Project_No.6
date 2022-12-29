@@ -57,12 +57,15 @@ void play(int wDeck[][13], int people,int count) {
 		}
 		co[i] = input;
 	}
+
 	for (int i = 0; i < people; i++) {
 		if (co[i] == mode)printf("ª±®a%dÄ¹\n", i + 1);
 		else printf("ª±®a%d¿é\n", i + 1);
 	}
+
 }
 int main() {
+
 	srand(time(NULL));
 	int deck[4][13] = { 0 }, people;
 	shuffle(deck);
