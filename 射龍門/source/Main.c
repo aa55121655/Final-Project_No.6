@@ -61,9 +61,6 @@ void play(int wDeck[][13], int people,int count) {
 		if (co[i] == mode)printf("ª±®a%dÄ¹\n", i + 1);
 		else printf("ª±®a%d¿é\n", i + 1);
 	}
-
-
-
 }
 int main() {
 	srand(time(NULL));
