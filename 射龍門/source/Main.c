@@ -26,7 +26,7 @@ int check(int left, int right, int card) {
 	else return 2;
 }
 
-void gamble(int *gam,int *bal,int people,int *money) {
+void gamble(int *gam, int *bal, int people, int *money) {
 	for (int input, i = 0; i < people; i++) {
 		printf("第%d位玩家\n賭法:", i + 1);
 		scanf("%d", &input);
@@ -37,7 +37,7 @@ void gamble(int *gam,int *bal,int people,int *money) {
 		gam[i] = input;
 		printf("金額(最多%d):", money[i]);
 		scanf("%d", &input);
-		while (input >money[i] || input<=0) {
+		while (input > money[i] || input <= 0) {
 			printf("不符合規則請重新輸入金額:", i + 1);
 			scanf("%d", &input);
 		}
@@ -45,7 +45,7 @@ void gamble(int *gam,int *bal,int people,int *money) {
 	}
 }
 
-void play(int wDeck[][13], int people,int *money) {
+void play(int wDeck[][13], int people, int *money) {
 	printf("-----------------------------\n");
 	int left, right, count = 0;
 	left = wDeck[(++count) % 4][(++count) % 13] % 13 + 1;
@@ -56,7 +56,7 @@ void play(int wDeck[][13], int people,int *money) {
 		right = wDeck[(++count) % 4][(++count) % 13] % 13 + 1;
 	}
 	if (left > right) swap(&left, &right);
-	printf("%d %d\n", left, right);
+	printf("*%d %d*\n", left, right);
 
 	int mode = check(left, right, wDeck[(++count) % 4][(++count) % 13] % 13 + 1);
 	int *gam = calloc(people, sizeof(int)), mag[3] = { 3,7,3 }, *bal = calloc(people, sizeof(int));
@@ -66,8 +66,8 @@ void play(int wDeck[][13], int people,int *money) {
 	else if (right - left > 5) mag[0] = 5;
 	else mag[2] = 5;
 
-	printf("0:門外(賠率:%d) 1:撞柱(賠率:%d) 2:門內(賠率:%d)\n",mag[0], mag[1], mag[2]);
-	gamble(gam, bal, people,money);
+	printf("0:門外(賠率:%d) 1:撞柱(賠率:%d) 2:門內(賠率:%d)\n", mag[0], mag[1], mag[2]);
+	gamble(gam, bal, people, money);
 
 	printf(">>>>>開出來的牌是:%d<<<<<\n", wDeck[count % 4][count % 13] % 13 + 1);
 	for (int i = 0; i < people; i++) {
@@ -82,7 +82,7 @@ void play(int wDeck[][13], int people,int *money) {
 	}
 
 	printf(">>>>>各玩家剩餘金額<<<<<\n");
-	for (int i = 0; i < people; i++) printf("第%d位玩家剩餘:%d\n", i+1, money[i]);
+	for (int i = 0; i < people; i++) printf("第%d位玩家剩餘:%d\n", i + 1, money[i]);
 }
 int main() {
 	srand(time(NULL));
@@ -93,13 +93,18 @@ int main() {
 	printf("玩家有幾人?");
 	scanf("%d", &people);
 	int *money = calloc(people, sizeof(int));
-	for (int i = 0; i < people; i++) money[i] = 1000;
-	for (int j,i = 0; i < 5; i++) {
+	for (int z = 0; z < people; z++) money[z] = 1000;
+	for (int i = 0; i < 5; i++) {
 		int deck[4][13] = { 0 };
 		shuffle(deck);
 		play(deck, people, money);
-		for (j = 0; j < people; j++)if (money[i] <= 0) break;
-		if (j != people) break;
+		for (int j = 0; j < people; j++) {
+			if (money[j] <= 0) {
+				i = 10000;
+				j = 10000;
+				break;
+			}
+		}
 	}
 	printf("-----------------------------\n遊戲結束");
 }
