@@ -34,31 +34,33 @@ void gamble(int *gam, int *bal, int people, int *money) {
 			printf("不符合規則請重新輸入賭法:", i + 1);
 			scanf("%d", &input);
 		}
-		gam[i] = input;
+		gam[i] = input;//記錄輸入賭法
 		printf("金額(最多%d):", money[i]);
 		scanf("%d", &input);
 		while (input > money[i] || input <= 0) {
 			printf("不符合規則請重新輸入金額:", i + 1);
 			scanf("%d", &input);
 		}
-		bal[i] = input;
+		bal[i] = input;//紀錄輸入金額
 	}
 }
 
 void play(int wDeck[][13], int people, int *money) {
 	printf("-----------------------------\n");
 	int left, right, count = 0;
-	left = wDeck[(++count) % 4][(++count) % 13] % 13 + 1;
-	right = wDeck[(++count) % 4][(++count) % 13] % 13 + 1;
+	left = wDeck[(++count) % 4][(count) % 13] % 13 + 1;
+	right = wDeck[(++count) % 4][(count) % 13] % 13 + 1;
 	while (abs(right - left) <= 1)
 	{
-		left = wDeck[count % 4][count % 13] % 13 + 1;
-		right = wDeck[(++count) % 4][(++count) % 13] % 13 + 1;
+		left = wDeck[++count % 4][count % 13] % 13 + 1;
+		right = wDeck[(++count) % 4][(count) % 13] % 13 + 1;
 	}
 	if (left > right) swap(&left, &right);
-	printf("*%d %d*\n", left, right);
+	printf("  ~~~~~~~\n");
+	printf("*! %d  %d !*\n", left, right); 
+	printf("  ~~~~~~~\n");
 
-	int mode = check(left, right, wDeck[(++count) % 4][(++count) % 13] % 13 + 1);
+	int mode = check(left, right, wDeck[(++count) % 4][(count) % 13] % 13 + 1);
 	int *gam = calloc(people, sizeof(int)), mag[3] = { 3,7,3 }, *bal = calloc(people, sizeof(int));
 
 	if (right - left == 2) mag[2] = 10;
@@ -69,7 +71,7 @@ void play(int wDeck[][13], int people, int *money) {
 	printf("0:門外(賠率:%d) 1:撞柱(賠率:%d) 2:門內(賠率:%d)\n", mag[0], mag[1], mag[2]);
 	gamble(gam, bal, people, money);
 
-	printf(">>>>>開出來的牌是:%d<<<<<\n", wDeck[count % 4][count % 13] % 13 + 1);
+	printf(">>>>>開出來的牌是: |%d|<<<<<\n", wDeck[count % 4][count % 13] % 13 + 1);
 	for (int i = 0; i < people; i++) {
 		if (gam[i] == mode) {
 			money[i] += bal[i] * mag[gam[i]];
@@ -81,7 +83,7 @@ void play(int wDeck[][13], int people, int *money) {
 		}
 	}
 
-	printf(">>>>>各玩家剩餘金額<<<<<\n");
+	printf(">>>>>/各玩家剩餘金額/<<<<<\n");
 	for (int i = 0; i < people; i++) printf("第%d位玩家剩餘:%d\n", i + 1, money[i]);
 }
 int main() {
@@ -105,6 +107,6 @@ int main() {
 				break;
 			}
 		}
-	}
+	}//i回合數設定
 	printf("-----------------------------\n遊戲結束");
 }
